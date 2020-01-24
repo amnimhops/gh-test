@@ -1,28 +1,42 @@
+const $ = require('jquery');
+
 import { ListServiceError, ListService } from '../app/services/listService';
+import { User } from '../app/models/user';
 
-let username = "fu";
-let password = "bar";
-let service = new ListService();
+const username = "fu";
+const password = "bar";
+let service = null;
 
-test("success on user registration", async () => {
-    expect(await service.register("fu", "bar")).toBe(true);
+beforeEach(() => {
+    service = new ListService($.ajax);
 });
 
-test("login fails when wrong password is supplied", async () => {
-    expect(await service.login(username, "")).toThrow(Error);
+describe('registration', () => {
+    it("returns an user instance on success", async () => {
+        let userData = await service.register(username, password);
+        expect(userData).not.toBe(null);
+        expect(userData).toBeInstanceOf(User);
+    });
 });
 
-test("login succeeds when right password is supplied", async () => {
-    expect(await service.login(username, password)).toBe(true);
+describe('login', () => {
+    it("fails when wrong password is supplied", async () => {
+        expect(await service.login(username, "")).toThrow(ListServiceError);
+    });
+    it("returns json web token after a successful login", async () => {
+        let jwt = await service.login(username, password);
+        expect(jwt).not.toBe(null);
+        expect(jwt.length).toBeGreatherThan(0);
+    });
 });
-
-test("service methods fail if user is not logged in", async () => {
-    try {
-        await service.getLists();
-    } catch (e) {
-        expect(e).toBeInstanceOf(ListServiceError);
-    }
+/*
+describe("getLists", () => {
+    it("returns an array of objects", async () => {
+        await service.login(username, password);
+        
+        let lists = await service.getLists();
+        expect(lists).toBeInstanceOf(Array);
+    });
 })
 
-
-
+*/
