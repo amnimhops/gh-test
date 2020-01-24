@@ -1,0 +1,30 @@
+{
+  "name": "gh-test",
+  "version": "1.0.0",
+  "description": "Prueba técnica para geekshubs",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amnimhops/gh-test.git"
+  },
+  "author": "amnimhops",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amnimhops/gh-test/issues"
+  },
+  "homepage": "https://github.com/amnimhops/gh-test#readme",
+  "private": true,
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "jest": "^25.1.0"
+  },
+  "dependencies": {
+    "http-server": "^0.12.1"
+  }
+}
