@@ -70,7 +70,11 @@ export class ListService {
                 url: 'https://apitrello.herokuapp.com/list/'+id,
                 contentType: 'application/json'
             }).done((data) => {
-                resolve(new List(data));
+                if(data.length == 0){
+                    resolve(null);
+                }else{
+                    resolve(new List(data[0]));
+                }
             }).fail((data) => {
                 reject(new ListServiceError(data.status, data.statusText));
             });
@@ -105,14 +109,25 @@ export class ListService {
                 data: JSON.stringify({ "name": name }),
                 contentType: 'application/json'
             }).done((data) => {
-                resolve(new List(data));
+                resolve(data.length==1 && data[0] == 1);
             }).fail((data) => {
                 reject(new ListServiceError(data.status, data.statusText));
             });
         });
     }
     async deleteList(id) {
-
+        return new Promise((resolve, reject) => {
+            this.ajax({
+                headers: { 'Authorization': 'Bearer ' + this._jwt },
+                method: 'DELETE',
+                url: 'https://apitrello.herokuapp.com/list/'+id,
+                contentType: 'application/json'
+            }).done((data) => { 
+                resolve();
+            }).fail((data) => {
+                reject(new ListServiceError(data.status, data.statusText));
+            });
+        });
     }
     async addTask(listId, name) {
 

@@ -15,7 +15,7 @@ let service = null;
 function getRandomName(prefix) {
     return prefix + parseInt(Math.random() * 100);
 }
-async function findValidNonExistentListId(){
+async function findValidNonExistentListId() {
     return (await service.getLists()).reduce((max, list) => list.id > max ? list.id : max, 0) + 1;
 }
 beforeEach(() => {
@@ -68,6 +68,7 @@ describe("lists", () => {
         let name = getRandomName('list')
         let newList = await service.addList(name);
         let list = await service.getList(newList.id);
+        
         expect(list).not.toBe(null);
         expect(list).toBeInstanceOf(List);
         expect(list.name).toBe(name);
@@ -85,9 +86,9 @@ describe("lists", () => {
 
     it("returns null if list does not exist", async () => {
         await service.login(username, password);
-        
+
         let id = await findValidNonExistentListId();
-        let list = service.getList(id);
+        let list = await service.getList(id);
         expect(list).toBeNull();
     });
 
@@ -103,40 +104,36 @@ describe("lists", () => {
         expect(list.name).toBe(name);
     });
 
-    it("fails to update a non-existent list", async () => {
+    it("does nothing when updating a non-existent list", async () => {
         await service.login(username, password);
 
-        try {
-            let lists = await service.getLists();
-            let list = await service.updateList("wtf?", "wtf!");
-            throw 'An exception was expected';
-        } catch (e) {
-            expect(e.code).toBe(500);
-        }
+        let id = await findValidNonExistentListId();
+        let success = await service.updateList(id);
+        expect(success).toBe(false);
+
     });
 
-    it("updates an existent list returning its model", async () => {
+    it("update list name by a given listId", async () => {
         await service.login(username, password);
 
         const name = getRandomName('list');
         const newName = name + '-bis';
         let list = await service.addList(name);
-        let updatedList = await service.updateList(list.id, newName);
-        expect(updatedList).not.toBe(null);
-        expect(updatedList.id).toBe(list.id);
-        expect(updatedList.name).toBe(newName);
+        let success = await service.updateList(list.id, newName);
+        expect(success).toBe(true);
+        expect((await service.getList(list.id)).name).toBe(newName);
     });
 
-    it("fails to delete an invalid list id", async () => {
+    // La API devuelve erroneamente un 202 al intentar borrar un id alfanumérico
+    // cuando la tónica general es usar un error 500 para id's no validos.
+    it("does nothing when deleting an invalid list id", async () => {
         await service.login(username, password);
+        await service.deleteList('voidlist');
+    });
 
-        try {
-            await service.deleteList('voidlist');
-            throw 'An exception was expected';
-        } catch (e) {
-            expect(e.code).toBe(500);
-        }
-
+    it("does nothing when deleting a non-existent listId", async () => {
+        await service.login(username, password);
+        await service.deleteList(findValidNonExistentListId());
     });
 
     it("deletes a list by a given id", async () => {
@@ -144,8 +141,8 @@ describe("lists", () => {
 
         let newList = await service.addList(getRandomName('list'));
         await service.deleteList(newList.id);
-
-
+        let deletedList = await service.getList(newList.id);
+        expect(deletedList).toBeNull();
     });
 
 
