@@ -12,6 +12,12 @@ const password = "bar";
  */
 let service = null;
 
+function getRandomName(prefix) {
+    return prefix + parseInt(Math.random() * 100);
+}
+async function findValidNonExistentListId(){
+    return (await service.getLists()).reduce((max, list) => list.id > max ? list.id : max, 0) + 1;
+}
 beforeEach(() => {
     service = new ListService($.ajax);
 });
@@ -29,15 +35,15 @@ describe('login', () => {
         try {
             await service.login(username, "");
             throw 'An exception was expected';
-        }catch(e){
+        } catch (e) {
             expect(e.code).toBe(401);
         }
     });
-    it("fails when user does not exist", async()=>{
-        try{
-            await service.login(new Date().getTime(),"");
+    it("fails when user does not exist", async () => {
+        try {
+            await service.login(new Date().getTime(), "");
             throw 'An exception was expected';
-        }catch(e){
+        } catch (e) {
             expect(e.code).toBe(204);
         }
     });
@@ -49,49 +55,98 @@ describe('login', () => {
 });
 
 describe("lists", () => {
-    it("returns a new list model when a list is created", async() =>{
+    it("returns an array of objects", async () => {
         await service.login(username, password);
 
-        const name = "list-"+parseInt(Math.random()* 100);
-        
-        let list = await service.addList(name);
-        console.log(list);
+        let lists = await service.getLists();
+        expect(lists).not.toBe(null);
+        expect(lists).toBeInstanceOf(Array);
+    });
+
+    it("returns a single list when requested with a listId", async () => {
+        await service.login(username, password);
+        let name = getRandomName('list')
+        let newList = await service.addList(name);
+        let list = await service.getList(newList.id);
         expect(list).not.toBe(null);
         expect(list).toBeInstanceOf(List);
         expect(list.name).toBe(name);
     });
 
-    it("fails to update a non-existent list", async() =>{
+    it("fails if asked about an invalid listId", async () => {
         await service.login(username, password);
-
-        try{
-            let list = await service.updateList("wtf?","wtf!");
+        try {
+            await service.getList("dalist");
             throw 'An exception was expected';
-        }catch(e){
+        } catch (e) {
             expect(e.code).toBe(500);
         }
     });
 
-    it("returns a single list when requested with a listId", async()=>{
+    it("returns null if list does not exist", async () => {
         await service.login(username, password);
-        let newList = await service.addList("xxx");
-        let list = await service.getList(newList.id);
+        
+        let id = await findValidNonExistentListId();
+        let list = service.getList(id);
+        expect(list).toBeNull();
+    });
+
+    it("returns a new list model when a list is created", async () => {
+        await service.login(username, password);
+
+        const name = getRandomName('list');
+
+        let list = await service.addList(name);
+
         expect(list).not.toBe(null);
         expect(list).toBeInstanceOf(List);
-        
-         
+        expect(list.name).toBe(name);
     });
-    it.todo("fails if asked about a non-existent listId");
-    it.todo("fails if asked for a non-existent listId");
-    it.todo("updates an existent list");
-    it.todo("fails to update a list if the id does not exist");
-    it.todo("deletes a list with a given listId");
-    
-    it("returns an array of objects for logged user", async () => {
+
+    it("fails to update a non-existent list", async () => {
         await service.login(username, password);
-       
-        let lists = await service.getLists();
-        expect(lists).not.toBe(null);
-        expect(lists).toBeInstanceOf(Array);
+
+        try {
+            let lists = await service.getLists();
+            let list = await service.updateList("wtf?", "wtf!");
+            throw 'An exception was expected';
+        } catch (e) {
+            expect(e.code).toBe(500);
+        }
     });
+
+    it("updates an existent list returning its model", async () => {
+        await service.login(username, password);
+
+        const name = getRandomName('list');
+        const newName = name + '-bis';
+        let list = await service.addList(name);
+        let updatedList = await service.updateList(list.id, newName);
+        expect(updatedList).not.toBe(null);
+        expect(updatedList.id).toBe(list.id);
+        expect(updatedList.name).toBe(newName);
+    });
+
+    it("fails to delete an invalid list id", async () => {
+        await service.login(username, password);
+
+        try {
+            await service.deleteList('voidlist');
+            throw 'An exception was expected';
+        } catch (e) {
+            expect(e.code).toBe(500);
+        }
+
+    });
+
+    it("deletes a list by a given id", async () => {
+        await service.login(username, password);
+
+        let newList = await service.addList(getRandomName('list'));
+        await service.deleteList(newList.id);
+
+
+    });
+
+
 });
