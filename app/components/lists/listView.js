@@ -37,7 +37,7 @@ export class ListView extends EventEmitter {
         });
         this.$("#submit-register").click(() => {
             let username = this.$("#register-frm input[name=username]").val();
-            let password = this.$("#login-frm input[name=password]").val();
+            let password = this.$("#register-frm input[name=password]").val();
 
             if (username && password) {
                 this.raise('registerButtonClicked', { username, password });

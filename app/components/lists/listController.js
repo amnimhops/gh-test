@@ -36,6 +36,21 @@ export class ListController {
             model.user = null;
         });
 
+        this.view.on('registerButtonClicked', async(data)=>{
+            this.view.showMessage('Esperando api');
+            console.log('Comenzando registro,datos recibidos', data);
+
+            let user = await this.service.register(data.username, data.password);
+            let token = await this.service.login(data.username,data.password);
+
+            this.storage.setItem("token", token);
+            this.storage.setItem("username", data.username);
+            
+            this.model.user = data.username;
+
+            return this.loadUserLists();
+        });
+
         this.view.on('removeListButtonClicked', (list) => {
             console.log(list);
         });
