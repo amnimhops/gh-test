@@ -78,6 +78,12 @@
             color:greenyellow;
         }
 
+        #prompt .footer{
+            margin-top:25px;
+            text-align:right;
+        }
+        
+
         button{
             background-color:var(--background-dark);
             border:1px solid var(--background-dark);

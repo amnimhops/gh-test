@@ -51,10 +51,6 @@ export class ListController {
             return this.loadUserLists();
         });
 
-        this.view.on('removeListButtonClicked', (list) => {
-            console.log(list);
-        });
-
         this.view.on('listNameEdited', async (list, name) => {
             try {
                 let success = await this.service.updateList(list.id, name)
@@ -76,8 +72,16 @@ export class ListController {
 
         this.view.on('removeListButtonClicked', async (list) => {
             try {
-                await this.service.deleteList(list.id)
-                this.model.deleteList(list);
+                // Si el modelo tiene tareas asignadas, preguntar
+                /*if(this.model.getListTasks(list.id).length>0){
+
+                }*/
+                this.view.prompt("Atención","La lista seleccionada tiene tareas asociadas. ¿Quieres eliminarla?",async (accept)=>{
+                    if(accept){
+                        await this.service.deleteList(list.id)
+                        this.model.deleteList(list);                    
+                    }
+                });
             } catch (err) {
                 this.view.showMessage('Error:' + err.message);
             }

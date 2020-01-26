@@ -42,7 +42,7 @@ export class ListView extends EventEmitter {
             if (username && password) {
                 this.raise('registerButtonClicked', { username, password });
             }
-        })
+        });
         this.$("#info>div>span").click(() => {
             this.hideMessage();
         });
@@ -231,6 +231,26 @@ export class ListView extends EventEmitter {
         if (timeout) {
             setTimeout(() => this.hideMessage(), timeout);
         }
+    }
+
+    
+    prompt(title,message,callback){
+        this.$("#prompt").show();
+        
+        this.$("#prompt h2").text(title);
+        this.$("#prompt>div>div:first").text(message);
+        this.$("#prompt-accept").click(()=>{
+            this.$("#prompt").hide();
+            this.$("#prompt-accept").unbind();
+            this.$("#prompt-reject").unbind();
+            callback(true);
+        });
+        this.$("#prompt-reject").click(()=>{
+            this.$("#prompt").hide();
+            this.$("#prompt-accept").unbind();
+            this.$("#prompt-reject").unbind();
+            callback(false);
+        });        
     }
 
     hideMessage() {
