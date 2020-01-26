@@ -12,6 +12,9 @@ import {EventEmitter} from '../../models/events.js';
  * @fires removeTaskButtonClicked
  * @fires taskNameEdited
  */
+
+const KeyEscape = 27;
+const KeyIntro = 13;
 export class ListView extends EventEmitter {
     constructor(model, jQuery) {
         super();
@@ -33,6 +36,8 @@ export class ListView extends EventEmitter {
 
             if (username && password) {
                 this.raise('loginButtonClicked', { username, password });
+            }else{
+                this.showMessage('Hay que proporcionar usuario y clave para confirmar la identidad');
             }
         });
         this.$("#submit-register").click(() => {
@@ -41,6 +46,8 @@ export class ListView extends EventEmitter {
 
             if (username && password) {
                 this.raise('registerButtonClicked', { username, password });
+            }else{
+                this.showMessage('Hay que proporcionar usuario y clave para el registro');
             }
         });
         this.$("#info>div>span").click(() => {
@@ -164,7 +171,7 @@ export class ListView extends EventEmitter {
 
     addTask(task) {
         let ul = this.$(`#list-${task.idlist}>div.task-holder>ul`);
-        ul.append(`<li id="task-${task.id}"><span class="remove-task">&times;</span><span class="date">${task.createdAt}</span><span class="title">${task.task}</span></li>`);
+        ul.append(`<li id="task-${task.id}"><span class="remove-task" title="Eliminar tarea">&times;</span><span class="header">#${task.id} &middot; Creada el ${task.createdAt}</span><span class="title" title="Click para cambiar">${task.task}</span></li>`);
         this.$(`#task-${task.id}>span.remove-task`).click(() => {
             this.raise('removeTaskButtonClicked', task);
         });
