@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <script src="../node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="../app/app.js" type="module" defer></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div id="info" class="modal" hidden>
+        <div class="content">
+            <span>&times;</span>
+            <h2></h2>
+            <div></div>
+        </div>
+        
+    </div>
+    <!--<div id="prompt" class="modal">
+        <div class="content">
+            <h2></h2>
+            <div></div>
+            <div>
+                <button id="button-accept">Aceptar</button>
+                <button id="button-cancel">Cancelar</button>
+            </div>
+        </div>
+    </div>-->
+    <nav>
+        <span id="greeter" hidden></span>
+        <a id="login-link" href="#">login</a>
+        <a id="logout-link" href="#">logout</a>
+        <a id="register-link" href="#">register</a>
+    </nav>
+    
+    <div id="app-views">
+        <div id="home-view">
+            <h2>Listas, listas everywhere!</h2>
+            <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur in auctor justo, vel malesuada lectus. Ut gravida porttitor mi, gravida egestas augue efficitur quis. Praesent eu magna semper ipsum fermentum semper. Morbi accumsan egestas urna sed aliquam. Cras mattis quam a sagittis venenatis. Sed nec mauris eget odio cursus tristique at vitae dui. Donec enim urna, rhoncus in varius sed, auctor vel eros. Quisque tincidunt vel diam vitae luctus. Vivamus et rutrum elit. Maecenas vitae est vitae arcu pharetra posuere et a tortor. </div>
+        </div>
+        <div id="register-view">
+            <h2>Registro</h2>
+            <form id="register-frm">
+                <input type="text" placeholder="Nombre de usuario" />
+                <input type="password" placeholder="Password" />
+                <button id="submit-register" type="button">Confirmar</button>
+                <span class="error" hidden>{{errmsg}}</span>
+            </form>
+        </div>
+        <div id="login-view">
+            <h2>Identificación</h2>
+            <form id="login-frm">
+                <input name="username" type="text" placeholder="Nombre de usuario" />
+                <input name="password" type="password" placeholder="Password" />
+                <button id="submit-login" type="button">Entrar</button>
+                <span class="error" hidden>{{errmsg}}</span>
+            </form>
+        </div>
+        <div id="lists-view">
+            <h2>Mis listas</h2>
+            <span>
+                <button id="add-task" class="button-green">Crear nueva</button>
+                <button id="erase-tasks" class="button-red">Borrar todas</button>
+            </span>
+            <ul id="list-holder"></ul>
+        </div>
+    </div>
+    
+    <!--<section id="user-lists">
+        <h2>Listas de tareas</h2>
+        <ul id="list-holder">
+            <li>
+                <ul>
+                    <li><span>&#x2630;</span>List name</li>
+                    <li>l12</li>
+                    <li>l13</li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>l21</li>
+                    <li>l22</li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li><button>Crear lista</button></li>
+                </ul>
+            </li>
+        </ul>
+    </section>-->
+</body>
+
+</html>
