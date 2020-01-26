@@ -1,6 +1,6 @@
-import { User } from '../models/user';
-import { List } from '../models/list';
-import { Task } from '../models/task';
+import { User } from '../models/user.js';
+import { List } from '../models/list.js';
+import { Task } from '../models/task.js';
 
 export class ListServiceError {
     constructor(code, message) {
@@ -15,6 +15,13 @@ export class ListService {
         this._jwt = null;
     }
 
+    /**
+     * @param {string} token json web token
+     */
+    set token(token){
+        this._jwt = token;
+    }
+    
     async register(user, password) {
         return new Promise((resolve, reject) => {
             this.ajax({
@@ -179,7 +186,7 @@ export class ListService {
                 contentType: 'application/json'
             }).done((data) => {
                 if (data) {
-                    resolve(new Task(data[0]));
+                    resolve(new Task(data));
                 } else {
                     resolve(null);
                 }
@@ -194,7 +201,7 @@ export class ListService {
                 headers: { 'Authorization': 'Bearer ' + this._jwt },
                 method: 'PUT',
                 url: 'https://apitrello.herokuapp.com/tasks/' + id,
-                data: JSON.stringify({ "taskname": name }),
+                data: JSON.stringify({ "task": name }),
                 contentType: 'application/json'
             }).done((data) => {
                 resolve(data.length == 1 && data[0] == 1);
@@ -209,6 +216,25 @@ export class ListService {
                 headers: { 'Authorization': 'Bearer ' + this._jwt },
                 method: 'DELETE',
                 url: 'https://apitrello.herokuapp.com/list/tasks/' + listId,
+                contentType: 'application/json'
+            }).done((data, textStatus, jqXHR) => {
+                if (jqXHR.status == 200) {
+                    resolve();
+                } else {
+                    reject(new ListServiceError(jqXHR.status, textStatus));
+                }
+            }).fail((data) => {
+                reject(new ListServiceError(data.status, data.statusText));
+            });
+        });
+    }
+
+    async deleteTask(id) {
+        return new Promise((resolve, reject) => {
+            this.ajax({
+                headers: { 'Authorization': 'Bearer ' + this._jwt },
+                method: 'DELETE',
+                url: 'https://apitrello.herokuapp.com/tasks/' + id,
                 contentType: 'application/json'
             }).done((data, textStatus, jqXHR) => {
                 if (jqXHR.status == 200) {

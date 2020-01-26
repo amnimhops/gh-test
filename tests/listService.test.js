@@ -248,4 +248,26 @@ describe("tasks", () => {
         let success = await service.updateTask(task.id,newName);
         expect(success).toBe(true);
     });
+
+    it("changes task name after updating",async()=>{
+        await service.login(username, password);
+
+        let newList = await service.addList(getRandomName('list'));
+        let task = await service.addTask(newList.id,getRandomName('task'));
+        let newName = getRandomName("task");
+        let success = await service.updateTask(task.id,newName);
+        let updatedTask = await service.getTask(task.id);
+        expect(updatedTask.task).toBe(newName);
+    });
+
+
+    it("deletes a single task by a given task id",async()=>{
+        await service.login(username, password);
+
+        let newList = await service.addList(getRandomName('list'));
+        let task = await service.addTask(newList.id,getRandomName('task'));
+        await service.deleteTask(task.id);
+        let taskList = await service.getListTasks(newList.id);
+        expect(taskList.length).toBe(0);
+    });
 });
