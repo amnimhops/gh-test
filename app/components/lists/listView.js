@@ -119,11 +119,12 @@ export class ListView extends EventEmitter {
      */
     addList(list) {
         this.$("#list-holder").append(`<li id="list-${list.id}"></li>`);
-        this.$(`#list-${list.id}`).append(`<span class="opts">&times;</span>`);
+        this.$(`#list-${list.id}`).append(`<span class="remove-list">&times;</span>`);
         this.$(`#list-${list.id}`).append(`<h3>${list.name}</h3>`);
-        this.$(`#list-${list.id}`).append(`<div class="task-holder"><ul></ul><span class="newtask">Crear una tarea...</span></div>`);
+        this.$(`#list-${list.id}`).append(`<div class="task-holder"><ul></ul></div>`);
+        this.$(`#list-${list.id}`).append(`<span class="newtask">Crear una tarea...</span>`);
 
-        this.$(`#list-${list.id}>span`).click(() => this.deleteList(list));
+        this.$(`#list-${list.id}>span.remove-list`).click(() => this.deleteList(list));
 
         this.$(`#list-${list.id} h3`)
             .click(() => this.startListEdition(list))
@@ -135,7 +136,7 @@ export class ListView extends EventEmitter {
                     event.preventDefault();
                 }
             });
-        this.$(`#list-${list.id}>div.task-holder>span.newtask`).click(() => {
+        this.$(`#list-${list.id}>span.newtask`).click(() => {
             this.raise('addTaskButtonClicked', list);
         });
 

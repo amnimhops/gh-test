@@ -146,7 +146,7 @@
             cursor:pointer;
         }
 
-        #list-holder>li>span{
+        #list-holder>li>span.remove-list{
             font-size:1em;
             background-color:var(--background-dark);
             cursor:pointer;
@@ -156,6 +156,20 @@
             text-align:right;
             font-weight:bold;
         }   
+        #list-holder>li>span.remove-list:hover{
+            color:red;
+        }
+        #list-holder>li>span.newtask{
+            display:inline-block;
+            margin:25px 0 25px 10px;
+            font-weight: bold;
+            color:#3f3f3f;
+            cursor:pointer
+        }
+        #list-holder>li>span.newtask:hover{
+            text-decoration: underline;            
+        }
+      
         /* Boton de eliminar */     
         #list-holder>li>span:first-child{
             font-size:1.5em;
@@ -182,8 +196,7 @@
             
             word-wrap: break-word;
         }
-
-      
+        
         .task-holder ul{
             margin:0px;
             padding:0px;
@@ -196,16 +209,17 @@
             margin:10px;
             padding:5px;
         }
-        .task-holder span.newtask{
-            display:inline-block;
-            margin-left:10px;
-            margin-top:25px;
+        .task-holder ul>li:hover{
+            background-color:#f0f0f0;
         }
         .task-holder span.remove-task{
             float:right;
-            color:red;
+            color:black
             font-weight: bolder;
             cursor:pointer;
+        }
+        .task-holder span.remove-task:hover{
+            color:red;
         }
         .task-holder ul>li>span.title{
             display:block;
