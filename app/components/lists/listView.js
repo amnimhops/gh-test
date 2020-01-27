@@ -13,14 +13,32 @@ import {EventEmitter} from '../../models/events.js';
  * @fires taskNameEdited
  */
 
+/**
+ * @constant Código numérico de la tecla escape
+ */
 const KeyEscape = 27;
+/**
+ * @constant Código numérico de la tecla enter
+ */
 const KeyIntro = 13;
+
+/**
+ * Vista de la aplicación. Esta clase se encarga de visualizar
+ * la información contenida en el modelo de datos y de transmitir
+ * a los observadores externos las acciones del usuario.
+ */
 export class ListView extends EventEmitter {
+    /**
+     * @constructor
+     * @param {ListModel} model 
+     * @param {JQuery} jQuery 
+     */
     constructor(model, jQuery) {
         super();
         this.model = model;
         this.$ = jQuery;
-
+        
+        // Bindings con la interfaz
         this.$("#login-link").click(() => {
             this.showView('login-view');
         });
@@ -39,6 +57,8 @@ export class ListView extends EventEmitter {
             }else{
                 this.showMessage('Hay que proporcionar usuario y clave para confirmar la identidad');
             }
+            // Prevenimos el submit del formulario
+            return false;
         });
         this.$("#submit-register").click(() => {
             let username = this.$("#register-frm input[name=username]").val();
@@ -49,6 +69,8 @@ export class ListView extends EventEmitter {
             }else{
                 this.showMessage('Hay que proporcionar usuario y clave para el registro');
             }
+            // Prevenimos el submit del formulario
+            return false;
         });
         this.$("#info>div>span").click(() => {
             this.hideMessage();
@@ -59,6 +81,8 @@ export class ListView extends EventEmitter {
         this.$("#erase-tasks").click(() => {
             this.raise('eraseListsButtonClicked');
         });
+
+        // Nos suscribimos a los cambios en el usuario
         model.on('userChanged', (user) => {
             if (user == null) {
                 this.reset();
@@ -70,7 +94,7 @@ export class ListView extends EventEmitter {
                 this.greeter = "Hola, " + user;
             }
         });
-
+        // Nos suscribimos a los cambios en las listas
         model.on('listAdded', (list) => {
             this.addList(list);
         });
@@ -84,7 +108,7 @@ export class ListView extends EventEmitter {
                 this.$(`#list-${list.id}`).remove();
             });
         });
-
+        // Nos suscribimos a los cambios en las tareas
         model.on('taskAdded', (task) => {
             this.addTask(task);
         });
@@ -95,6 +119,11 @@ export class ListView extends EventEmitter {
 
     }
 
+    /**
+     * Cambia el mensaje de bienvenida en el menú, o lo oculta
+     * en caso de un mensaje vacío
+     * @param {string} message
+     */
     set greeter(message) {
         if (!message) {
             this.$("#greeter").hide();
@@ -104,6 +133,9 @@ export class ListView extends EventEmitter {
         }
     }
 
+    /**
+     * Resetea la vista a su valor original
+     */
     reset() {
         this.$("#list-holder").empty();
         this.$("#login-link").show();
@@ -114,7 +146,7 @@ export class ListView extends EventEmitter {
 
     }
     /**
-     * 
+     * Crea la UI correspondiente a una lista
      * @param {List} list 
      */
     addList(list) {
@@ -126,6 +158,8 @@ export class ListView extends EventEmitter {
 
         this.$(`#list-${list.id}>span.remove-list`).click(() => this.deleteList(list));
 
+        // Se ha empleado la característica contentEditable de HTML5
+        // en lugar de usar múltiples ventanas y/o popups
         this.$(`#list-${list.id} h3`)
             .click(() => this.startListEdition(list))
             .on('keydown', (event) => {
@@ -136,24 +170,43 @@ export class ListView extends EventEmitter {
                     event.preventDefault();
                 }
             });
+
         this.$(`#list-${list.id}>span.newtask`).click(() => {
             this.raise('addTaskButtonClicked', list);
         });
 
     }
-
+    /**
+     * Pone una lista en modo edición, cambiando
+     * las propiedades de la interfaz para poder
+     * cambiar el nombre
+     * @param {List} list 
+     */
     startListEdition(list) {
         let h3 = this.$(`#list-${list.id} h3`);
         h3.addClass('editing').attr('contenteditable', true);
         h3.focusout(() => this.completeListEdition(list));
         h3.focus()
     }
+    /**
+     * Cancela el modo edición de una lista, devolviendo
+     * la interfaz a su estado original
+     * @param {List} list 
+     */
     cancelListEdition(list) {
         let h3 = this.$(`#list-${list.id} h3`);
         h3.attr('contenteditable', false);
         h3.removeClass('editing');
         h3.text(list.name);
     }
+    /**
+     * Completa el modo edición, devolviendo la interfaz
+     * a su estado original y emitiendo un evento para informar
+     * a los observadores de este cambio
+     * 
+     * @param {List} list 
+     * @fires listNameEdited
+     */
     completeListEdition(list) {
         let newName = this.$(`#list-${list.id} h3`).text();
         // No se hace nada si el nombre no ha cambiado
@@ -166,10 +219,21 @@ export class ListView extends EventEmitter {
         h3.removeClass('editing');
     }
 
+    /**
+     * Comunica a los observadores la intención del usuario
+     * de eliminar una lista
+     * @param {List} list 
+     * @fires removeListButtonClicked
+     */
     deleteList(list) {
         this.raise('removeListButtonClicked', list);
     }
-
+    /**
+     * Añade los elementos necesarios a la interfaz
+     * para controlar una lista dentro de una tarea
+     * 
+     * @param {Task} task 
+     */
     addTask(task) {
         let ul = this.$(`#list-${task.idlist}>div.task-holder>ul`);
         ul.append(`<li id="task-${task.id}"><span class="remove-task" title="Eliminar tarea">&times;</span><span class="header">#${task.id} &middot; Creada el ${task.createdAt}</span><span class="title" title="Click para cambiar">${task.task}</span></li>`);
@@ -187,19 +251,37 @@ export class ListView extends EventEmitter {
                 }
             });
     }
-
+     /**
+     * Pone una tarea en modo edición, cambiando
+     * las propiedades de la interfaz para poder
+     * cambiar el nombre
+     * @param {Task} task
+     */
     startTaskEdition(task) {
         let title = this.$(`#task-${task.id} span.title`);
         title.addClass('editing').attr('contenteditable', true);
         title.focusout(() => this.completeTaskEdition(task));
         title.focus()
     }
+    /**
+     * Cancela el modo edición de una tarea, devolviendo
+     * la interfaz a su estado original
+     * @param {Task} task
+     */
     cancelTaskEdition(task) {
         let title = this.$(`#task-${task.id} span.title`);
         title.attr('contenteditable', false);
         title.removeClass('editing');
         title.text(task.name);
     }
+    /**
+     * Completa el modo edición, devolviendo la interfaz
+     * a su estado original y emitiendo un evento para informar
+     * a los observadores de este cambio
+     * 
+     * @param {Task} task
+     * @fires taskNameEdited
+     */
     completeTaskEdition(task) {
         let newName = this.$(`#task-${task.id} span.title`).text();
         // No se hace nada si el nombre no ha cambiado
@@ -212,7 +294,12 @@ export class ListView extends EventEmitter {
         title.removeClass('editing');
     }
 
-
+    /**
+     * Muestra un mensaje modal que bloquea la interfaz con un velo.
+     * 
+     * @param {any} message Mensaje que se mostrará. Si es un objeto, contendrá el título y el mensaje
+     * @param {number} timeout Milisegundos tras los cuales se ocultará automáticamente el mensaje
+     */
     showMessage(message, timeout) {
         let title = null;
         let text = null;
@@ -241,7 +328,13 @@ export class ListView extends EventEmitter {
         }
     }
 
-    
+    /**
+     * Crea una ventana modal para pedir interacción (básica) al usuario
+     * 
+     * @param {string} title Título de la ventana
+     * @param {string} message mensaje de la ventana
+     * @param {Function} callback Función a la que se suministrará la decisión del usuario: true o false en función del botón empleado
+     */
     prompt(title,message,callback){
         this.$("#prompt").show();
         
@@ -249,6 +342,8 @@ export class ListView extends EventEmitter {
         this.$("#prompt>div>div:first").text(message);
         this.$("#prompt-accept").click(()=>{
             this.$("#prompt").hide();
+            // Esto es importante, múltiples invocaciones 
+            // generarían múltiples ejecuciones
             this.$("#prompt-accept").unbind();
             this.$("#prompt-reject").unbind();
             callback(true);
@@ -260,11 +355,18 @@ export class ListView extends EventEmitter {
             callback(false);
         });        
     }
-
+    /**
+     * Oculta el mensaje de la interfaz
+     */
     hideMessage() {
         this.$("#info").hide();
     }
 
+
+    /**
+     * Muestra una de las cuatro vistas básicas de la interfaz: home-view, login-view, register-view y lists-view
+     * @param {string} view 
+     */
     showView(view) {
         this.$("#app-views>div").hide();
         if (view) {

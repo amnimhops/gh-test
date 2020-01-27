@@ -1,245 +1,230 @@
-/*#lists {
-            display: grid;
-            list-style: none;
-            grid-template-columns: repeat(5, 1fr);
-            grid-gap: 10px;
-            grid-auto-rows: minmax(100px, auto);
-        }
-        #lists > li{
-            display:block;
-            grid-column: 1/1;
-            grid-row:1;
-            color:yellowgreen;
-            border:3px solid brown;
-            border-radius:15px;
-        }*/
-        :root {
-            --accent-color: dodgerblue;
-            --background-dark: #303030;
-        }
+:root {
+    --accent-color: dodgerblue;
+    --background-dark: #303030;
+}
 
-        body {
-            padding: 0px;
-            margin: 0px;
-            font-family: Helvetica;
-        }
-        .modal{
-            position:fixed;
-            width:100vw;
-            height:100vh;
-            background-color:rgba(0,0,0,.5);
-        }
-        .modal div.content{
-            background-color:white;
-            width:50%;
-            margin:auto;
-            margin-top:125px;
-            padding:25px;
-            
-        }
-        .modal div.content span{
-            float:right;
-            padding:3px;
-            font-size:1.5em;
-            font-weight:bold;
-        }
-        .modal div.content span:hover{
-            border-radius: 5px;
-            background-color:black;
-            color:white;
-            cursor:pointer;
-        }
-        .modal div.content h2{
-            margin-bottom:25px;
-        }
-        
-        nav {
-            background-color: var(--background-dark);
-            color: white;
-            font-weight: bold;
-            padding-left:25px;
-        }
+body {
+    padding: 0px;
+    margin: 0px;
+    font-family: Helvetica;
+}
+.modal{
+    position:fixed;
+    width:100vw;
+    height:100vh;
+    background-color:rgba(0,0,0,.5);
+}
+.modal div.content{
+    background-color:white;
+    width:50%;
+    margin:auto;
+    margin-top:125px;
+    padding:25px;
+    
+}
+.modal div.content span{
+    float:right;
+    padding:3px;
+    font-size:1.5em;
+    font-weight:bold;
+}
+.modal div.content span:hover{
+    border-radius: 5px;
+    background-color:black;
+    color:white;
+    cursor:pointer;
+}
+.modal div.content h2{
+    margin-bottom:25px;
+}
 
-        nav a {
-            display: inline-block;
-            padding: 18px;
-            font-size:1.2em;
-            color: white;
-            text-decoration: none;
-        }
+nav {
+    background-color: var(--background-dark);
+    color: white;
+    font-weight: bold;
+    padding-left:25px;
+}
 
-        nav a:hover {
-            background-color: var(--accent-color);
-        }
+nav a {
+    display: inline-block;
+    padding: 18px;
+    font-size:1.2em;
+    color: white;
+    text-decoration: none;
+}
 
-        #greeter{
-            padding-right:25px;
-            border-right:2px solid gray;
-            color:greenyellow;
-        }
+nav a:hover {
+    background-color: var(--accent-color);
+}
 
-        #prompt .footer{
-            margin-top:25px;
-            text-align:right;
-        }
-        
+#greeter{
+    padding-right:25px;
+    border-right:2px solid gray;
+    color:greenyellow;
+}
 
-        button{
-            background-color:var(--background-dark);
-            border:1px solid var(--background-dark);
-            color:white;
-            font-size:1.5em;
-            border-radius:5px;
-            padding:5px;
-        }
-        button:active{
-            border:1px solid blue;
-        }
-        button:hover{
-            background-color:var(--accent-color);
-            border:1px solid var(--accent-color);
-        }
-        .button-green{
-            background-color:rgb(99, 148, 26);
-            border:1px solid rgb(99, 148, 26);
-        }
-        .button-red{
-            background-color:rgb(148, 30, 26);
-            border:1px solid rgb(148, 30, 26);
-        }
-        #lists-view{
-            margin-top:25px;
-        }
-        #lists-view h2{
-            display:inline-block;
-            margin-right:25px;
-        }
-        ul {
-            list-style: none;
-        }
-        #app-views{
-            margin-left:43px;
-            margin-right:43px;
-        }
-        #list-holder {
-            margin:0px;
-            padding:0px;
-            display:grid;
-            grid-template-columns: repeat(4, 25%);
-            grid-template-rows: auto;
-            height:auto;
-            /*
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;*/
-        }
+#prompt .footer{
+    margin-top:25px;
+    text-align:right;
+}
 
-        #list-holder>li {
-            display: block;
-            /*flex-grow:1;*/
-            
-            margin:20px;
-            border: 1px solid darkgray;
-            background-color: lightgray;
-            border-radius:5px;
-        }
-        
-        #list-holder>li>h3{
-            font-size:1em;
-            display:block;
-            color:black;
-            margin:5px 0 0 5px ;
-            padding:5px;
-            cursor:pointer;
-        }
 
-        #list-holder>li>span.remove-list{
-            font-size:1em;
-            background-color:var(--background-dark);
-            cursor:pointer;
-            color:white;
-            padding-right:3px;
-            padding-left:3px;
-            text-align:right;
-            font-weight:bold;
-        }   
-        #list-holder>li>span.remove-list:hover{
-            color:red;
-        }
-        #list-holder>li>span.newtask{
-            display:inline-block;
-            margin:25px 0 25px 10px;
-            font-weight: bold;
-            color:#3f3f3f;
-            cursor:pointer
-        }
-        #list-holder>li>span.newtask:hover{
-            text-decoration: underline;            
-        }
-      
-        /* Boton de eliminar */     
-        #list-holder>li>span:first-child{
-            font-size:1.5em;
-            float:right;
-        }
+button{
+    background-color:var(--background-dark);
+    border:1px solid var(--background-dark);
+    color:white;
+    font-size:1.5em;
+    border-radius:5px;
+    padding:5px;
+}
+button:active{
+    border:1px solid blue;
+}
+button:hover{
+    background-color:var(--accent-color);
+    border:1px solid var(--accent-color);
+}
+.button-green{
+    background-color:rgb(99, 148, 26);
+    border:1px solid rgb(99, 148, 26);
+}
+.button-red{
+    background-color:rgb(148, 30, 26);
+    border:1px solid rgb(148, 30, 26);
+}
+#lists-view{
+    margin-top:25px;
+}
+#lists-view h2{
+    display:inline-block;
+    margin-right:25px;
+}
+ul {
+    list-style: none;
+}
+#app-views{
+    margin-left:43px;
+    margin-right:43px;
+}
+#list-holder {
+    margin:0px;
+    padding:0px;
+    display:grid;
+    grid-template-columns: repeat(4, 25%);
+    grid-template-rows: auto;
+    height:auto;
+    /*
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;*/
+}
 
-        #list-holder>li>h3.editing{
-            
-            font-style:oblique;
-            background-color:white;
-            padding:3px;
-            font-size:0.9em;
-            color:gray;
-            cursor:text;
-        }
+#list-holder>li {
+    display: block;
+    /*flex-grow:1;*/
+    
+    margin:20px;
+    border: 1px solid darkgray;
+    background-color: lightgray;
+    border-radius:5px;
+}
 
-        #list-holder>li>ul {
-            border: 1px solid red;
-            padding: 0px;
-        }
+#list-holder>li>h3{
+    font-size:1em;
+    display:block;
+    color:black;
+    margin:5px 0 0 5px ;
+    padding:5px;
+    cursor:pointer;
+}
 
-        #list-holder>li>ul>li {
-            margin: 0px;
-            padding: 5px;
-            min-width: 50px;
-            
-            word-wrap: break-word;
-        }
-        
-        .task-holder ul{
-            margin:0px;
-            padding:0px;
-        }
-        .task-holder ul>li{
-            background-color:white;
-            box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
-            border-radius:3px;
-            
-            margin:10px;
-            padding:5px;
-        }
-        .task-holder ul>li:hover{
-            background-color:#f0f0f0;
-        }
-        .task-holder span.remove-task{
-            float:right;
-            color:black;
-            font-weight: bolder;
-            cursor:pointer;
-        }
-        .task-holder span.remove-task:hover{
-            color:red;
-        }
-        .task-holder ul>li>span.title{
-            display:block;
-            margin-top:10px;
-            cursor:pointer;
-        }
-        .task-holder ul>li>span.editing{
-            font-style:oblique;
-            background-color:white;
-            padding:3px;
-            font-size:0.8em;
-            color:gray;
-            cursor:text;
-        }
+#list-holder>li>span.remove-list{
+    font-size:1em;
+    background-color:var(--background-dark);
+    cursor:pointer;
+    color:white;
+    padding-right:3px;
+    padding-left:3px;
+    text-align:right;
+    font-weight:bold;
+}   
+#list-holder>li>span.remove-list:hover{
+    color:red;
+}
+#list-holder>li>span.newtask{
+    display:inline-block;
+    margin:25px 0 25px 10px;
+    font-weight: bold;
+    color:#3f3f3f;
+    cursor:pointer
+}
+#list-holder>li>span.newtask:hover{
+    text-decoration: underline;            
+}
+
+/* Boton de eliminar */     
+#list-holder>li>span:first-child{
+    font-size:1.5em;
+    float:right;
+}
+
+#list-holder>li>h3.editing{
+    
+    font-style:oblique;
+    background-color:white;
+    padding:3px;
+    font-size:0.9em;
+    color:gray;
+    cursor:text;
+}
+
+#list-holder>li>ul {
+    border: 1px solid red;
+    padding: 0px;
+}
+
+#list-holder>li>ul>li {
+    margin: 0px;
+    padding: 5px;
+    min-width: 50px;
+    
+    word-wrap: break-word;
+}
+
+.task-holder ul{
+    margin:0px;
+    padding:0px;
+}
+.task-holder ul>li{
+    background-color:white;
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+    border-radius:3px;
+    
+    margin:10px;
+    padding:5px;
+}
+.task-holder ul>li:hover{
+    background-color:#f0f0f0;
+}
+.task-holder span.remove-task{
+    float:right;
+    color:black;
+    font-weight: bolder;
+    cursor:pointer;
+}
+.task-holder span.remove-task:hover{
+    color:red;
+}
+.task-holder ul>li>span.title{
+    display:block;
+    margin-top:10px;
+    cursor:pointer;
+}
+.task-holder ul>li>span.editing{
+    font-style:oblique;
+    background-color:white;
+    padding:3px;
+    font-size:0.8em;
+    color:gray;
+    cursor:text;
+}
