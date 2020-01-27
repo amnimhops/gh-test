@@ -22,14 +22,14 @@ export class ListController {
             this.view.showMessage('Esperando api');
             console.log('Comenzando login,datos recibidos', data);
 
-            try{
+            try {
                 let token = await this.service.login(data.username, data.password);
                 this.storage.setItem("token", token);
                 this.storage.setItem("username", data.username);
                 this.model.user = data.username;
 
                 return this.loadUserLists();
-            }catch(err){
+            } catch (err) {
                 this.view.showMessage('Error:' + err.message);
             }
         });
@@ -40,21 +40,21 @@ export class ListController {
             model.user = null;
         });
 
-        this.view.on('registerButtonClicked', async(data)=>{
+        this.view.on('registerButtonClicked', async (data) => {
             this.view.showMessage('Esperando api');
             console.log('Comenzando registro,datos recibidos', data);
 
-            try{
+            try {
                 await this.service.register(data.username, data.password);
-                let token = await this.service.login(data.username,data.password);
+                let token = await this.service.login(data.username, data.password);
 
                 this.storage.setItem("token", token);
                 this.storage.setItem("username", data.username);
-                
+
                 this.model.user = data.username;
 
                 return this.loadUserLists();
-            }catch(err){
+            } catch (err) {
                 this.view.showMessage('Error:' + err.message);
             }
         });
@@ -81,15 +81,18 @@ export class ListController {
         this.view.on('removeListButtonClicked', async (list) => {
             try {
                 // Si el modelo tiene tareas asignadas, preguntar
-                /*if(this.model.getListTasks(list.id).length>0){
 
-                }*/
-                this.view.prompt("Atención","La lista seleccionada tiene tareas asociadas. ¿Quieres eliminarla?",async (accept)=>{
-                    if(accept){
-                        await this.service.deleteList(list.id)
-                        this.model.deleteList(list);                    
-                    }
-                });
+                if (this.model.getListTasks(list.id).length > 0) {
+                    this.view.prompt("Atención", "La lista seleccionada tiene tareas asociadas. ¿Quieres eliminarla?", async (accept) => {
+                        if (accept) {
+                            await this.service.deleteList(list.id)
+                            this.model.deleteList(list);
+                        }
+                    });
+                } else {
+                    await this.service.deleteList(list.id)
+                    this.model.deleteList(list);
+                }
             } catch (err) {
                 this.view.showMessage('Error:' + err.message);
             }
