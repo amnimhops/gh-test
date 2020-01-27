@@ -119,20 +119,27 @@
         }
         #app-views{
             margin-left:43px;
+            margin-right:43px;
         }
         #list-holder {
             margin:0px;
             padding:0px;
+            display:grid;
+            grid-template-columns: repeat(4, 25%);
+            grid-template-rows: auto;
+            height:auto;
+            /*
             display: flex;
             flex-direction: row;
-            flex-wrap: wrap;
+            flex-wrap: wrap;*/
         }
 
         #list-holder>li {
             display: block;
-            min-width:150px;
-            margin:5px 5px 5px 0px;
-            border: 1px solid black;
+            /*flex-grow:1;*/
+            
+            margin:20px;
+            border: 1px solid darkgray;
             background-color: lightgray;
             border-radius:5px;
         }
@@ -180,6 +187,8 @@
             
             font-style:oblique;
             background-color:white;
+            padding:3px;
+            font-size:0.9em;
             color:gray;
             cursor:text;
         }
@@ -214,7 +223,7 @@
         }
         .task-holder span.remove-task{
             float:right;
-            color:black
+            color:black;
             font-weight: bolder;
             cursor:pointer;
         }
@@ -229,6 +238,8 @@
         .task-holder ul>li>span.editing{
             font-style:oblique;
             background-color:white;
+            padding:3px;
+            font-size:0.8em;
             color:gray;
             cursor:text;
         }
