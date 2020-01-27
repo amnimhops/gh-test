@@ -139,7 +139,7 @@
             /*flex-grow:1;*/
             
             margin:20px;
-            border: 1px solid black;
+            border: 1px solid darkgray;
             background-color: lightgray;
             border-radius:5px;
         }
@@ -187,6 +187,8 @@
             
             font-style:oblique;
             background-color:white;
+            padding:3px;
+            font-size:0.9em;
             color:gray;
             cursor:text;
         }
@@ -236,6 +238,8 @@
         .task-holder ul>li>span.editing{
             font-style:oblique;
             background-color:white;
+            padding:3px;
+            font-size:0.8em;
             color:gray;
             cursor:text;
         }
